@@ -1,2 +1,2 @@
-# go-playground
-Play ground for programming in Go language
+# Go Playground
+Playground for Go language programming
