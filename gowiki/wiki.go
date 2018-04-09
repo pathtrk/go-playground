@@ -7,6 +7,8 @@ import (
 	"net/http"
 )
 
+// var templates = template.Must(template.ParseFiles("edit.html", "view.html"))
+
 // Page struct
 type Page struct {
 	Title string
@@ -39,7 +41,6 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	t.Execute(w, p)
 }
 
 // Returns HTML content based on the URL
@@ -70,7 +71,7 @@ func saveHandler(w http.ResponseWriter, r *http.Request) {
 	p := &Page{Title: title, Body: []byte(body)}
 	err := p.save()
 	if err != nil {
-		http.Error(w, err.Error, http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	http.Redirect(w, r, "/view/"+title, http.StatusFound)
