@@ -52,7 +52,7 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
 }
 
 // makeHandler is a wrapper functoin that takes a function type and returns a handler
-func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.HandleFunc {
+func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		m := validPath.FindStringSubmatch(r.URL.Path)
 		if m == nil {
@@ -64,7 +64,7 @@ func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.Handl
 }
 
 // Returns HTML content based on the URL
-func viewHandler(w http.ResponseWriter, r *http.Request) {
+func viewHandler(w http.ResponseWriter, r *http.Request, title string) {
 	p, err := loadPage(title)
 	if err != nil {
 		http.Redirect(w, r, "/edit/"+title, http.StatusFound)
@@ -74,7 +74,7 @@ func viewHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Handle content editing
-func editHandler(w http.ResponseWriter, r *http.Request) {
+func editHandler(w http.ResponseWriter, r *http.Request, title string) {
 	p, err := loadPage(title)
 	if err != nil {
 		p = &Page{Title: title}
@@ -83,10 +83,10 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Save posted contents to files
-func saveHandler(w http.ResponseWriter, r *http.Request) {
+func saveHandler(w http.ResponseWriter, r *http.Request, title string) {
 	body := r.FormValue("body")
 	p := &Page{Title: title, Body: []byte(body)}
-	err = p.save()
+	err := p.save()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
