@@ -1,0 +1,9 @@
+strawberry
+banana
+strawberry
+blackberry
+orange
+banana
+blackberry
+orange
+orange
